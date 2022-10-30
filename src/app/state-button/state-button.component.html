@@ -1,0 +1,16 @@
+<div *ngIf="active">
+    <button (click)="mainClickEvent.emit()" class="btn-primary btn">
+        Add location
+    </button>
+</div>
+<div *ngIf="waiting">
+    <button class="btn-primary btn light">
+        Adding...
+    </button>
+</div>
+<!--<div *ngIf="loadable.error">{{loadable?.error?.message || 'Something went wrong'}}</div>-->
+<ng-container *ngIf="loaded">
+    <button class="btn-success btn">
+        Done
+    </button>
+</ng-container>
