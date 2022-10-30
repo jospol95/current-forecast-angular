@@ -34,6 +34,19 @@ export class WeatherEffects {
         }),
     );
 
+    @Effect()
+    updateCurrentForecast = this.actions$.pipe(
+        ofType<LoadWeather>(WeatherActionTypes.Load),
+        concatMap((action) => {
+            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+                tap(() => console.log(action.payload.zipcode)),
+                map((response: CurrentForecast) => new LoadWeatherSuccess(
+                    {currentForecast: response, zipcode: action.payload.zipcode})),
+                catchError(error => of(new LoadWeatherError(error)))
+            );
+        }),
+    );
+
     // @Effect ()
     // initialLoadCurrentForecast = this.actions$.pipe(
     //     ofType<InitWeather>(WeatherActionTypes.InitialLoad),

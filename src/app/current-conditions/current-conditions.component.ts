@@ -37,6 +37,8 @@ export class CurrentConditionsComponent implements OnInit{
         });
     }
 
+    //TODO: Set TimeOUt for 30 seconds, initial State(30), call effect update
+
     getCurrentConditions() {
         return this.weatherService.getCurrentConditions();
     }

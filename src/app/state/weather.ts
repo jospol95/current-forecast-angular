@@ -22,6 +22,10 @@ function baseWeatherReducer(state: Weather = createDefaultWeather(),
                 ...state,
                 currentForecasts: [...state.currentForecasts, {...action.payload.currentForecast, zipcode: action.payload.zipcode}],
             };
+        case WeatherActionTypes.UpdateSuccess:
+            let newState = {...state}
+            newState.currentForecasts[action.payload.arrayPosition] = action.payload.currentForecast;
+            return {...newState}
         default:
             return state;
     }

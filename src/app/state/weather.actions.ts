@@ -6,6 +6,7 @@ export enum WeatherActionTypes {
     Load = 'LOAD',
     LoadSuccess = 'LOAD SUCCESS',
     LoadError = 'LOAD ERROR',
+    UpdateSuccess = 'UPDATE SUCCESS'
 }
 
 // export class InitWeather implements Action {
@@ -14,6 +15,10 @@ export enum WeatherActionTypes {
 //     }
 // }
 
+export class UpdateSuccess implements Action {
+    readonly type = WeatherActionTypes.UpdateSuccess;
+    constructor(public payload: {currentForecast: CurrentForecast, zipcode: string, arrayPosition: number}) {}
+}
 export class LoadWeather implements Action {
     readonly type = WeatherActionTypes.Load;
     constructor(public payload: {zipcode: string}) {
@@ -37,4 +42,4 @@ export class LoadWeatherError implements Action {
 }
 
 
-export type NewWeatherActionUnion =  LoadWeather | LoadWeatherSuccess | LoadWeatherError
+export type NewWeatherActionUnion =  UpdateSuccess | LoadWeather | LoadWeatherSuccess | LoadWeatherError
