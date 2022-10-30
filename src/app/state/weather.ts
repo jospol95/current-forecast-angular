@@ -1,9 +1,10 @@
 import {createDefaultLoadable, Loadable} from './loadable';
 import {NewWeatherActionUnion, WeatherActionTypes} from './weather.actions';
 import {withLoadable} from './with-loadable';
+import {CurrentForecast} from '../types/current-forecast.type';
 
 export interface Weather extends Loadable {
-    currentForecasts: string[];
+    currentForecasts: CurrentForecast[];
 }
 
 export function createDefaultWeather(): Weather {
@@ -17,14 +18,9 @@ function baseWeatherReducer(state: Weather = createDefaultWeather(),
                             action: NewWeatherActionUnion): Weather {
     switch (action.type) {
         case WeatherActionTypes.LoadSuccess:
-            // var object = {
-            //     ...state,
-            //     entities: [...state.currentForecasts, action.payload.currentForecast] ,
-            // };
-            // console.log(object);
             return {
                 ...state,
-                currentForecasts: [...state.currentForecasts, action.payload.currentForecast],
+                currentForecasts: [...state.currentForecasts, {...action.payload.currentForecast, zipcode: action.payload.zipcode}],
             };
         default:
             return state;
@@ -34,6 +30,7 @@ function baseWeatherReducer(state: Weather = createDefaultWeather(),
 
 export function weatherReducer(state: Weather, action: NewWeatherActionUnion): Weather {
     return withLoadable(baseWeatherReducer, {
+        // initLoadActionType: WeatherActionTypes.InitialLoad,
         loadingActionType: WeatherActionTypes.Load,
         successActionType: WeatherActionTypes.LoadSuccess,
         errorActionType: WeatherActionTypes.LoadError,

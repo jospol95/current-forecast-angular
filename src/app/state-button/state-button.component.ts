@@ -18,7 +18,8 @@ export class StateButtonComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes.loadable.currentValue);
+        // console.log(changes.loadable.currentValue);
+        //TODO refactor to only 2 props
         if(!changes.loadable.currentValue.loading && !changes.loadable.currentValue.success){
             this.active = true;
             this.waiting = false;
@@ -37,7 +38,7 @@ export class StateButtonComponent implements OnChanges {
                 this.active = true;
                 this.waiting = false;
                 this.loaded = false;
-            }, 1000);
+            }, 500);
 
         }
     }

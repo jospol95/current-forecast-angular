@@ -2,7 +2,7 @@
   <h2>Enter a zipcode:</h2>
   <input type="text" #zipcode placeholder="Zipcode" class="form-control">
   <br>
-  <button class="btn btn-primary" (click)="addLocation(zipcode.value)" >
-    Add location
-  </button>
+  <state-button-component
+          (mainClickEvent)="addLocation(zipcode.value)"
+          [loadable]="locationForecast$ | async"></state-button-component>
 </div>

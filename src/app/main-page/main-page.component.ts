@@ -16,7 +16,7 @@ export class MainPageComponent {
     }
 
     load() {
-        const action = new LoadWeather();
-        this.store.dispatch(action);
+        // const action = new LoadWeather({});
+        // this.store.dispatch(action);
     }
 }

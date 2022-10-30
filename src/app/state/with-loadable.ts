@@ -9,6 +9,7 @@ export interface ReducerFunction<T, U extends Action>{
 }
 
 export interface ActionTypes {
+    // initLoadActionType: string | string[];
     loadingActionType: string | string[];
     successActionType: string | string[];
     errorActionType: string | string[];
@@ -17,6 +18,9 @@ export interface ActionTypes {
 export function withLoadable<T extends Loadable, U extends Action = Action>
 (reducer: ReducerFunction<T, U>, {loadingActionType, successActionType, errorActionType}: ActionTypes) {
     return (state: T, action: U): T => {
+        // if (matchType(initLoadActionType, action.type)) {
+        //     state = OnLoadableInitialLoad(state);
+        // }
         if (matchType(loadingActionType, action.type)) {
             state = onLoadableLoad(state);
         }

@@ -1,4 +1,4 @@
-export interface currentForecast{
+export class CurrentForecast{
     coord: Coord
     weather: Weather[]
     base: string
@@ -12,6 +12,7 @@ export interface currentForecast{
     id: number
     name: string
     cod: number
+    zipcode: string
 }
 
 export interface Coord {

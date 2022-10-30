@@ -1,9 +1,11 @@
-import {catchError, delay, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, concatMap, delay, map, switchMap, tap} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
-import {LoadWeatherError, LoadWeatherSuccess, WeatherActionTypes} from './weather.actions';
+import {LoadWeather, LoadWeatherError, LoadWeatherSuccess, WeatherActionTypes} from './weather.actions';
+import {WeatherService} from '../weather.service';
+import {CurrentForecast} from '../types/current-forecast.type';
 
 function mockApiResponse(): Observable<{ currentForecast: string }> {
     return of({
@@ -16,19 +18,32 @@ function mockApiResponse(): Observable<{ currentForecast: string }> {
 @Injectable()
 export class WeatherEffects {
 
-    constructor(private actions$: Actions, private http: HttpClient) {
+    constructor(private actions$: Actions, private weatherService: WeatherService) {
     }
 
     @Effect ()
-    loadNews = this.actions$.pipe(
-        ofType(WeatherActionTypes.Load),
-        switchMap(action => {
-            // return this.http.get('some url');
-            return mockApiResponse().pipe(
-                tap(() => console.log('called')),
-                map((response: any) => new LoadWeatherSuccess({currentForecast: response.currentForecast})),
+    loadCurrentForecast = this.actions$.pipe(
+        ofType<LoadWeather>(WeatherActionTypes.Load),
+        concatMap((action) => {
+            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+                tap(() => console.log(action.payload.zipcode)),
+                map((response: CurrentForecast) => new LoadWeatherSuccess(
+                    {currentForecast: response, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))
             );
         }),
     );
+
+    // @Effect ()
+    // initialLoadCurrentForecast = this.actions$.pipe(
+    //     ofType<InitWeather>(WeatherActionTypes.InitialLoad),
+    //     concatMap((action) => {
+    //         return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+    //             tap(() => console.log(action.payload.zipcode)),
+    //             map((response: CurrentForecast) => new LoadWeatherSuccess(
+    //                 {currentForecast: response, zipcode: action.payload.zipcode})),
+    //             catchError(error => of(new LoadWeatherError(error)))
+    //         );
+    //     }),
+    // );
 }
