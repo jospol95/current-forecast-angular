@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {WeatherService} from '../weather.service';
-import {LocationService} from '../location.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {WeatherService} from '../services/weather.service';
+import {LocationService} from '../services/location.service';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Weather} from '../state/weather';
-import {LoadWeather} from '../state/weather.actions';
+import {InitWeather, LoadWeather, RemoveWeatherCityForecast, UpdateWeather} from '../state/weather.actions';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ import {Observable} from 'rxjs';
     templateUrl: './current-conditions.component.html',
     styleUrls: ['./current-conditions.component.css']
 })
-export class CurrentConditionsComponent implements OnInit{
+export class CurrentConditionsComponent implements OnInit, OnDestroy{
 
     locationForecast$: Observable<Weather>;
 
@@ -31,29 +31,31 @@ export class CurrentConditionsComponent implements OnInit{
     initState(){
         //TODO could be a resolver
         this.locationService.locations.forEach((zipcode) => {
-            // debugger;
-            const action = new LoadWeather({zipcode});
+            const action = new InitWeather({zipcode});
             this.store.dispatch(action);
         });
     }
 
-    //TODO: Set TimeOUt for 30 seconds, initial State(30), call effect update
-
-    getCurrentConditions() {
-        return this.weatherService.getCurrentConditions();
-    }
-
-    showForecast(zipcode: string) {
-        this.router.navigate(['/forecast', zipcode])
-    }
-
-    getCurrentCondition(zipcode: string) {
-        const action = new LoadWeather({zipcode});
+    updateWeather($event: {index: number, zipcode: string}){
+        console.log('time');
+        const action = new UpdateWeather($event);
         this.store.dispatch(action);
     }
 
-    removeFromState() {
-
+    removeCurrentForecast(index: number){
+        const action = new RemoveWeatherCityForecast({index});
+        this.locationService.removeLocationFromStorage(index);
+        this.store.dispatch(action);
     }
+
+    ngOnDestroy(): void {
+        //Cleaning state
+        this.locationService.locations.forEach((value, index) => {
+            const action = new RemoveWeatherCityForecast({index});
+            this.store.dispatch(action);
+        })
+    }
+
+
 
 }

@@ -3,8 +3,16 @@ import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
-import {LoadWeather, LoadWeatherError, LoadWeatherSuccess, UpdateSuccess, UpdateWeather, WeatherActionTypes} from './weather.actions';
-import {WeatherService} from '../weather.service';
+import {
+    InitWeather, InitWeatherLoadSuccess,
+    LoadWeather,
+    LoadWeatherError,
+    LoadWeatherSuccess, RemoveWeatherCityForecast,
+    UpdateSuccess,
+    UpdateWeather,
+    WeatherActionTypes
+} from './weather.actions';
+import {WeatherService} from '../services/weather.service';
 import {CurrentForecast} from '../types/current-forecast.type';
 
 function mockApiResponse(): Observable<{ currentForecast: string }> {
@@ -24,10 +32,21 @@ export class WeatherEffects {
     @Effect ()
     loadCurrentForecast = this.actions$.pipe(
         ofType<LoadWeather>(WeatherActionTypes.Load),
+        switchMap((action) => {
+            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+                map((response: CurrentForecast) => new LoadWeatherSuccess(
+                    {currentForecast: response, zipcode: action.payload.zipcode})),
+                catchError(error => of(new LoadWeatherError(error)))
+            );
+        }),
+    );
+
+    @Effect ()
+    initCurrentForecast = this.actions$.pipe(
+        ofType<InitWeather>(WeatherActionTypes.InitialLoad),
         concatMap((action) => {
             return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
-                tap(() => console.log(action.payload.zipcode)),
-                map((response: CurrentForecast) => new LoadWeatherSuccess(
+                map((response: CurrentForecast) => new InitWeatherLoadSuccess(
                     {currentForecast: response, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))
             );
@@ -39,24 +58,21 @@ export class WeatherEffects {
         ofType<UpdateWeather>(WeatherActionTypes.Update),
         concatMap((action) => {
             return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
-                tap(() => console.log(action.payload.zipcode)),
                 map((response: CurrentForecast) => new UpdateSuccess(
-                    {currentForecast: response, zipcode: action.payload.zipcode, arrayPosition: action.payload.arrayPosition})),
+                    {currentForecast: response, index: action.payload.index, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))
             );
         }),
     );
 
-    // @Effect ()
-    // initialLoadCurrentForecast = this.actions$.pipe(
-    //     ofType<InitWeather>(WeatherActionTypes.InitialLoad),
-    //     concatMap((action) => {
-    //         return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
-    //             tap(() => console.log(action.payload.zipcode)),
-    //             map((response: CurrentForecast) => new LoadWeatherSuccess(
-    //                 {currentForecast: response, zipcode: action.payload.zipcode})),
-    //             catchError(error => of(new LoadWeatherError(error)))
-    //         );
-    //     }),
-    // );
+    @Effect()
+    removeCurrentForecast = this.actions$.pipe(
+        ofType<RemoveWeatherCityForecast>(WeatherActionTypes.RemoveForecast),
+        concatMap((action) => {
+            return of().pipe(
+                map(() => new RemoveWeatherCityForecast({index: action.payload.index}))
+            )
+        }),
+    );
+
 }

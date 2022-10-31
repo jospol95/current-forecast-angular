@@ -18,14 +18,20 @@ function baseWeatherReducer(state: Weather = createDefaultWeather(),
                             action: NewWeatherActionUnion): Weather {
     switch (action.type) {
         case WeatherActionTypes.LoadSuccess:
+        case WeatherActionTypes.InitialLoadSuccess:
             return {
                 ...state,
                 currentForecasts: [...state.currentForecasts, {...action.payload.currentForecast, zipcode: action.payload.zipcode}],
             };
         case WeatherActionTypes.UpdateSuccess:
-            let newState = {...state}
-            newState.currentForecasts[action.payload.arrayPosition] = action.payload.currentForecast;
+            let newState = JSON.parse(JSON.stringify(state));
+            newState.currentForecasts[action.payload.index] = {...action.payload.currentForecast, zipcode: action.payload.zipcode};
             return {...newState}
+        case WeatherActionTypes.RemoveForecast:
+            const indexToRemove = action.payload.index;
+            let oldState = JSON.parse(JSON.stringify(state));
+            oldState.currentForecasts.splice(indexToRemove,1);
+            return {...oldState}
         default:
             return state;
     }
@@ -34,9 +40,11 @@ function baseWeatherReducer(state: Weather = createDefaultWeather(),
 
 export function weatherReducer(state: Weather, action: NewWeatherActionUnion): Weather {
     return withLoadable(baseWeatherReducer, {
-        // initLoadActionType: WeatherActionTypes.InitialLoad,
+        initLoadActionType: WeatherActionTypes.InitialLoad,
         loadingActionType: WeatherActionTypes.Load,
         successActionType: WeatherActionTypes.LoadSuccess,
         errorActionType: WeatherActionTypes.LoadError,
+        successInitActionType: WeatherActionTypes.InitialLoadSuccess,
+        removeActionType: WeatherActionTypes.RemoveForecast
     })(state,action)
 }

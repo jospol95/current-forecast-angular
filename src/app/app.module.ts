@@ -4,9 +4,9 @@ import {FormsModule} from '@angular/forms';
 
 import {AppComponent} from './app.component';
 import {ZipcodeEntryComponent} from './zipcode-entry/zipcode-entry.component';
-import {LocationService} from './location.service';
+import {LocationService} from './services/location.service';
 import {ForecastsListComponent} from './forecasts-list/forecasts-list.component';
-import {WeatherService} from './weather.service';
+import {WeatherService} from './services/weather.service';
 import {CurrentConditionsComponent} from './current-conditions/current-conditions.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {RouterModule} from '@angular/router';
@@ -19,6 +19,7 @@ import {StoreModule} from '@ngrx/store';
 import {weatherReducer} from './state/weather';
 import {EffectsModule} from '@ngrx/effects';
 import {WeatherEffects} from './state/weather.effects';
+import {CurrentConditionsItemComponent} from './current-conditions/current-conditions-item/current-conditions-item.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import {WeatherEffects} from './state/weather.effects';
         ForecastsListComponent,
         CurrentConditionsComponent,
         MainPageComponent,
-        StateButtonComponent
+        StateButtonComponent,
+        CurrentConditionsItemComponent
     ],
     imports: [
         BrowserModule,

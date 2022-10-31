@@ -4,42 +4,49 @@ import {delay} from 'rxjs/operators';
 
 @Component({
     selector: 'state-button-component',
-    templateUrl: './state-button.component.html'
+    templateUrl: './state-button.component.html',
+    styleUrls: ['./state-button.component.css']
 })
 
 export class StateButtonComponent implements OnChanges {
     @Input() loadable: Loadable;
+    @Input() defaultColor: color = 'primary';
+    @Input() defaultText = 'Add';
+    @Input() loadingColor: color = 'primary'
+    @Input() loadingText = 'Adding...';
+    @Input() completedText = 'Done';
+    @Input() completedColor: color = 'success';
+    @Input() resetAfter = 500;
     @Output() mainClickEvent = new EventEmitter();
     public active: boolean;
-    public waiting: boolean;
-    public loaded: boolean;
+    public completed: boolean;
 
     constructor() {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log(changes.loadable.currentValue);
-        //TODO refactor to only 2 props
-        if(!changes.loadable.currentValue.loading && !changes.loadable.currentValue.success){
+        if (!changes.loadable.currentValue.loading && !changes.loadable.currentValue.success) {
             this.active = true;
-            this.waiting = false;
-            this.loaded = false;
+            // this.waiting = false;
+            this.completed = false;
         }
-        if(changes.loadable.currentValue.loading){
+        if (changes.loadable.currentValue.loading) {
             this.active = false;
-            this.waiting = true;
-            this.loaded = false;
+            // this.waiting = true;
+            this.completed = false;
         }
-        if(changes.loadable.currentValue.success){
+        if (changes.loadable.currentValue.success) {
             this.active = false;
-            this.waiting = false;
-            this.loaded = true;
+            // this.waiting = false;
+            this.completed = true;
             setTimeout(() => {
                 this.active = true;
-                this.waiting = false;
-                this.loaded = false;
-            }, 500);
+                // this.waiting = false;
+                this.completed = false;
+            }, this.resetAfter);
 
         }
     }
 }
+
+type color = 'primary' | 'success' | 'default' | 'secondary'

@@ -12,14 +12,14 @@ export function createDefaultLoadable(): Loadable {
     };
 }
 
-// export function OnLoadableInitialLoad<T extends Loadable>(loadable: T): T {
-//     return {
-//         ...(loadable as any),
-//         loading: false,
-//         success: false,
-//         error: null,
-//     } as T;
-// }
+export function onDefault<T extends Loadable>(loadable: T): T {
+    return {
+        ...(loadable as any),
+        loading: false,
+        success: false,
+        error: null,
+    } as T;
+}
 
 export function onLoadableLoad<T extends Loadable>(loadable: T): T {
     return {

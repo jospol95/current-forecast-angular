@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {LocationService} from "../location.service";
+import {LocationService} from "../services/location.service";
 import {Observable} from 'rxjs';
 import {Weather} from '../state/weather';
 import {Store} from '@ngrx/store';
@@ -11,13 +11,12 @@ import {LoadWeather} from '../state/weather.actions';
 })
 export class ZipcodeEntryComponent {
   locationForecast$: Observable<Weather>;
-  // @Output() locationAddedEvent = new EventEmitter<string>();
   constructor(private service : LocationService, private store: Store<{weather: Weather}>) {
     this.locationForecast$ = this.store.select(state => state.weather);
   }
 
   addLocation(zipcode : string){
-    this.service.addLocation(zipcode);
+    this.service.saveLocationInLocal(zipcode);
     const action = new LoadWeather({zipcode});
     this.store.dispatch(action);
   }

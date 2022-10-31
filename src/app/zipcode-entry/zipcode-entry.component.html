@@ -3,6 +3,7 @@
   <input type="text" #zipcode placeholder="Zipcode" class="form-control">
   <br>
   <state-button-component
+          defaultText="Add location"
           (mainClickEvent)="addLocation(zipcode.value)"
           [loadable]="locationForecast$ | async"></state-button-component>
 </div>

@@ -1,15 +1,32 @@
-<div *ngIf="active">
-    <button (click)="mainClickEvent.emit()" class="btn-primary btn">
-        Add location
+<!--<div *ngIf="active">-->
+<!--    <button (click)="mainClickEvent.emit()" class="btn-primary btn">-->
+<!--        {{defaultText}}-->
+<!--    </button>-->
+<!--</div>-->
+<!--<div *ngIf="waiting">-->
+<!--    <button class="btn-primary btn light" disabled>-->
+<!--        {{loadingText}}-->
+<!--    </button>-->
+<!--</div>-->
+<!--<ng-container *ngIf="loaded">-->
+<!--    <button class="btn-success btn" disabled>-->
+<!--        {{completedText}}-->
+<!--    </button>-->
+<!--</ng-container>-->
+
+
+<ng-container *ngIf="active">
+    <button (click)="mainClickEvent.emit()" class="btn-{{defaultColor}} btn">
+        {{defaultText}}
     </button>
-</div>
-<div *ngIf="waiting">
-    <button class="btn-primary btn light">
-        Adding...
+</ng-container>
+<ng-container *ngIf="!active && !completed">
+    <button class="btn-{{loadingColor}} btn light simulated-no-click">
+        {{loadingText}}
     </button>
-</div>
-<ng-container *ngIf="loaded">
-    <button class="btn-success btn">
-        Done
+</ng-container>
+<ng-container *ngIf="completed">
+    <button class="btn-{{completedColor}} btn simulated-no-click">
+        {{completedText}}
     </button>
 </ng-container>
