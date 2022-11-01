@@ -17,6 +17,7 @@ export class StateButtonComponent implements OnChanges {
     @Input() completedText = 'Done';
     @Input() completedColor: color = 'success';
     @Input() resetAfter = 500;
+    @Input() disabled = false;
     @Output() mainClickEvent = new EventEmitter();
     public active: boolean;
     public completed: boolean;

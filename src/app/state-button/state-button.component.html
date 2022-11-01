@@ -16,7 +16,8 @@
 
 
 <ng-container *ngIf="active">
-    <button (click)="mainClickEvent.emit()" class="btn-{{defaultColor}} btn">
+    <button [disabled]="disabled"
+            (click)="mainClickEvent.emit()" class="btn-{{defaultColor}} btn">
         {{defaultText}}
     </button>
 </ng-container>

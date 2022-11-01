@@ -20,6 +20,7 @@ import {weatherReducer} from './state/weather';
 import {EffectsModule} from '@ngrx/effects';
 import {WeatherEffects} from './state/weather.effects';
 import {CurrentConditionsItemComponent} from './current-conditions/current-conditions-item/current-conditions-item.component';
+import {AutoCompleteComponent} from './auto-complete/auto-complete.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import {CurrentConditionsItemComponent} from './current-conditions/current-condi
         CurrentConditionsComponent,
         MainPageComponent,
         StateButtonComponent,
-        CurrentConditionsItemComponent
+        CurrentConditionsItemComponent,
+        AutoCompleteComponent,
     ],
     imports: [
         BrowserModule,

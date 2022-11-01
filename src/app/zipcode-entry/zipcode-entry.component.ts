@@ -7,9 +7,12 @@ import {LoadWeather} from '../state/weather.actions';
 
 @Component({
   selector: 'app-zipcode-entry',
-  templateUrl: './zipcode-entry.component.html'
+  templateUrl: './zipcode-entry.component.html',
+  styleUrls: ['zipcode-entry.component.css']
 })
+
 export class ZipcodeEntryComponent {
+
   locationForecast$: Observable<Weather>;
   constructor(private service : LocationService, private store: Store<{weather: Weather}>) {
     this.locationForecast$ = this.store.select(state => state.weather);
@@ -20,5 +23,4 @@ export class ZipcodeEntryComponent {
     const action = new LoadWeather({zipcode});
     this.store.dispatch(action);
   }
-
 }
