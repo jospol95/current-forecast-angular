@@ -1,9 +1,15 @@
-<div class="auto-component-selector">
-    <input (click)="show=!show" type="text" #country placeholder="Country"
-           class="form-control">
-    <div *ngIf="show" class="results-container">
-        <div class="results-item" *ngFor="let country of countries">
-            {{country}}
+<form [formGroup]="stateForm" novalidate>
+    <div class="auto-component-selector">
+        <input id="search" (click)="toggleDropdown()" formControlName="search"
+               type="text" #country placeholder="Country"
+               class="form-control">
+        <div clickOutside (clickOutsideEvent)="toggleDropdown()" *ngIf="show" class="results-container">
+            <div class="results-item"
+                 *ngFor="let country of countries | searchFilter:getSearchValue()"
+                 (click)="setValue(country)">
+                <span [innerHTML]="country | highlightSearch: getSearchValue()" ></span>
+<!--                {{country}}-->
+            </div>
         </div>
     </div>
-</div>
+</form>

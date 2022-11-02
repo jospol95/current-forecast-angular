@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {AppComponent} from './app.component';
 import {ZipcodeEntryComponent} from './zipcode-entry/zipcode-entry.component';
@@ -21,10 +21,14 @@ import {EffectsModule} from '@ngrx/effects';
 import {WeatherEffects} from './state/weather.effects';
 import {CurrentConditionsItemComponent} from './current-conditions/current-conditions-item/current-conditions-item.component';
 import {AutoCompleteComponent} from './auto-complete/auto-complete.component';
+import {ClickOutsideDirective} from './directives/auto-complete.directive';
+import {SearchFilterPipe} from './pipes/filter-pipe';
+import {HighlightSearchPipe} from './pipes/highlight-search';
 
 @NgModule({
     declarations: [
         AppComponent,
+        ClickOutsideDirective,
         ZipcodeEntryComponent,
         ForecastsListComponent,
         CurrentConditionsComponent,
@@ -32,6 +36,8 @@ import {AutoCompleteComponent} from './auto-complete/auto-complete.component';
         StateButtonComponent,
         CurrentConditionsItemComponent,
         AutoCompleteComponent,
+        SearchFilterPipe,
+        HighlightSearchPipe,
     ],
     imports: [
         BrowserModule,
@@ -41,8 +47,10 @@ import {AutoCompleteComponent} from './auto-complete/auto-complete.component';
         routing,
         StoreModule.forRoot({weather: weatherReducer}),
         EffectsModule.forRoot([WeatherEffects]),
-        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production})
+        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+        ReactiveFormsModule
     ],
+    exports: [ClickOutsideDirective],
     providers: [LocationService, WeatherService],
     bootstrap: [AppComponent]
 })
