@@ -33,7 +33,7 @@ export class WeatherEffects {
     loadCurrentForecast = this.actions$.pipe(
         ofType<LoadWeather>(WeatherActionTypes.Load),
         switchMap((action) => {
-            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+            return this.weatherService.getCurrentForecast(action.payload.zipcode, action.payload.country).pipe(
                 map((response: CurrentForecast) => new LoadWeatherSuccess(
                     {currentForecast: response, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))
@@ -45,7 +45,7 @@ export class WeatherEffects {
     initCurrentForecast = this.actions$.pipe(
         ofType<InitWeather>(WeatherActionTypes.InitialLoad),
         concatMap((action) => {
-            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+            return this.weatherService.getCurrentForecast(action.payload.zipcode, action.payload.country).pipe(
                 map((response: CurrentForecast) => new InitWeatherLoadSuccess(
                     {currentForecast: response, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))
@@ -57,7 +57,7 @@ export class WeatherEffects {
     updateCurrentForecast = this.actions$.pipe(
         ofType<UpdateWeather>(WeatherActionTypes.Update),
         concatMap((action) => {
-            return this.weatherService.getCurrentForecast(action.payload.zipcode).pipe(
+            return this.weatherService.updateCurrentForecast(action.payload.zipcode, action.payload.countryCode).pipe(
                 map((response: CurrentForecast) => new UpdateSuccess(
                     {currentForecast: response, index: action.payload.index, zipcode: action.payload.zipcode})),
                 catchError(error => of(new LoadWeatherError(error)))

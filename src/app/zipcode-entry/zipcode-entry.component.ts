@@ -12,15 +12,16 @@ import {LoadWeather} from '../state/weather.actions';
 })
 
 export class ZipcodeEntryComponent {
-
+  public country = '';
   locationForecast$: Observable<Weather>;
   constructor(private service : LocationService, private store: Store<{weather: Weather}>) {
     this.locationForecast$ = this.store.select(state => state.weather);
   }
 
   addLocation(zipcode : string){
-    this.service.saveLocationInLocal(zipcode);
-    const action = new LoadWeather({zipcode});
+    this.service.saveLocationInLocal(zipcode, this.country);
+    debugger;
+    const action = new LoadWeather({zipcode,country: this.country});
     this.store.dispatch(action);
   }
 }

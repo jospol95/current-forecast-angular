@@ -3,6 +3,8 @@ import {Observable} from 'rxjs';
 
 import {HttpClient} from '@angular/common/http';
 import {CurrentForecast} from '../types/current-forecast.type';
+import {CountryEnum} from '../types/country.enum';
+
 
 @Injectable()
 export class WeatherService {
@@ -15,9 +17,16 @@ export class WeatherService {
     constructor(private http: HttpClient) {
     }
 
-    getCurrentForecast(zipcode: string): Observable<CurrentForecast> {
+    getCurrentForecast(zipcode: string, country: string): Observable<CurrentForecast> {
         // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
-        return this.http.get<CurrentForecast>(`${WeatherService.URL}/weather?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`);
+        const countryCode  = this.getEnumKeyByEnumValue(CountryEnum, country);
+        return this.http.get<CurrentForecast>(`${WeatherService.URL}/weather?zip=${zipcode},${countryCode}&units=imperial&APPID=${WeatherService.APPID}`);
+
+    }
+
+    updateCurrentForecast(zipcode: string, countryCode: string): Observable<CurrentForecast> {
+        // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
+        return this.http.get<CurrentForecast>(`${WeatherService.URL}/weather?zip=${zipcode},${countryCode}&units=imperial&APPID=${WeatherService.APPID}`);
 
     }
     //
@@ -39,9 +48,10 @@ export class WeatherService {
     //     return this.currentConditions;
     // }
 
-    getForecast(zipcode: string): Observable<any> {
+
+    getForecast(zipcode: string, countryCode: string): Observable<any> {
         // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
-        return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},us&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
+        return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},${countryCode}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
 
     }
 
@@ -63,4 +73,8 @@ export class WeatherService {
         }
     }
 
+    getEnumKeyByEnumValue(myEnum, enumValue) {
+        let keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
+        return keys.length > 0 ? keys[0] : null;
+    }
 }

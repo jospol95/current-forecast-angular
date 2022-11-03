@@ -22,7 +22,7 @@ export class UpdateSuccess implements Action {
 
 export class UpdateWeather implements Action {
     readonly type = WeatherActionTypes.Update;
-    constructor(public payload: { index: number, zipcode: string }) {
+    constructor(public payload: { index: number, zipcode: string, countryCode: string }) {
     }
 }
 
@@ -34,14 +34,14 @@ export class RemoveWeatherCityForecast implements Action {
 
 export class LoadWeather implements Action {
     readonly type = WeatherActionTypes.Load;
-    constructor(public payload: { zipcode: string }) {
+    constructor(public payload: { zipcode: string, country: string }) {
     }
 }
 
 export class InitWeather implements Action {
     //new loadable with default.
     readonly type = WeatherActionTypes.InitialLoad;
-    constructor(public payload: { zipcode: string }) {
+    constructor(public payload: { zipcode: string, country: string }) {
     }
 }
 

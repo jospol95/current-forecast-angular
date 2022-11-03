@@ -1,6 +1,7 @@
 <form [formGroup]="stateForm" novalidate>
     <div class="auto-component-selector">
-        <input id="search" (click)="toggleDropdown()" formControlName="search"
+        <input id="search" (click)="toggleDropdown()"
+               formControlName="search"
                type="text" #country placeholder="Country"
                class="form-control">
         <div clickOutside (clickOutsideEvent)="toggleDropdown()" *ngIf="show" class="results-container">

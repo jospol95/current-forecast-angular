@@ -30,15 +30,15 @@ export class CurrentConditionsComponent implements OnInit, OnDestroy{
 
     initState(){
         //TODO could be a resolver
-        this.locationService.locations.forEach((zipcode) => {
-            const action = new InitWeather({zipcode});
+        this.locationService.locationsV2.forEach((loc) => {
+            const action = new InitWeather({zipcode: loc.zipcode, country: loc.country});
             this.store.dispatch(action);
         });
     }
 
-    updateWeather($event: {index: number, zipcode: string}){
+    updateWeather($event: {index: number, zipcode: string, countryCode: string}){
         console.log('time');
-        const action = new UpdateWeather($event);
+        const action = new UpdateWeather({index: $event.index, zipcode: $event.zipcode, countryCode: $event.countryCode});
         this.store.dispatch(action);
     }
 
@@ -50,7 +50,7 @@ export class CurrentConditionsComponent implements OnInit, OnDestroy{
 
     ngOnDestroy(): void {
         //Cleaning state
-        this.locationService.locations.forEach((value, index) => {
+        this.locationService.locationsV2.forEach((value, index) => {
             const action = new RemoveWeatherCityForecast({index});
             this.store.dispatch(action);
         })
