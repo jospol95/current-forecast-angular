@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Loadable} from '../state/loadable';
+import {Loadable} from '../../../state/loadable';
 import {delay} from 'rxjs/operators';
 
 @Component({
@@ -17,7 +17,7 @@ export class StateButtonComponent implements OnChanges {
     @Input() completedText = 'Done';
     @Input() completedColor: color = 'success';
     @Input() resetAfter = 500;
-    @Input() disabled = false;
+    @Input() mainClickDisabled = false;
     @Output() mainClickEvent = new EventEmitter();
     public active: boolean;
     public completed: boolean;
@@ -28,21 +28,17 @@ export class StateButtonComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (!changes.loadable.currentValue.loading && !changes.loadable.currentValue.success) {
             this.active = true;
-            // this.waiting = false;
             this.completed = false;
         }
         if (changes.loadable.currentValue.loading) {
             this.active = false;
-            // this.waiting = true;
             this.completed = false;
         }
         if (changes.loadable.currentValue.success) {
             this.active = false;
-            // this.waiting = false;
             this.completed = true;
             setTimeout(() => {
                 this.active = true;
-                // this.waiting = false;
                 this.completed = false;
             }, this.resetAfter);
 

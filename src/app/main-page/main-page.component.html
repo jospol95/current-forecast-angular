@@ -1,12 +1,7 @@
 <div class="container-fluid">
 
   <app-zipcode-entry> </app-zipcode-entry>
-  <app-current-conditions></app-current-conditions>
+  <app-current-conditions [updateEvery]="30000" ></app-current-conditions>
 
-<!--  <state-button-component-->
-<!--          (mainClickEvent)="load()"-->
-<!--          [loadable]="news$ | async"></state-button-component>-->
-<!--  <button (click)="load()">Load shit</button>-->
-<!--  <p *ngFor="let item of (news$ | async).currentForecasts">{{item}}</p>-->
 
 </div>

@@ -12,7 +12,6 @@ export class ClickOutsideDirective {
 
     @HostListener('document:click', ['$event', '$event.target'])
     public onClick(event: MouseEvent, targetElement: HTMLElement): void {
-        // debugger;
         if (targetElement.id === 'search') {
             return;
         }

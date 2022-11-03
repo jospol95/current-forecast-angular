@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {CurrentForecast} from '../../types/current-forecast.type';
-import {WeatherService} from '../../services/weather.service';
+import {CurrentForecast} from '../../../types/current-forecast.type';
+import {WeatherService} from '../../../services/weather.service';
 import {interval, Subscription, timer} from 'rxjs';
 import {startWith, switchMap} from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ import {startWith, switchMap} from 'rxjs/operators';
 export class CurrentConditionsItemComponent implements OnInit, OnDestroy{
     @Input() public item: CurrentForecast
     @Input() public index: number
+    @Input() public updateEvery: number = 30000;
     @Output() public removeFromStateEvent = new EventEmitter<number>();
     @Output() public updateWeatherEvent = new EventEmitter<{index: number, zipcode: string, countryCode: string }>();
 
@@ -21,7 +22,7 @@ export class CurrentConditionsItemComponent implements OnInit, OnDestroy{
     }
 
     ngOnInit(): void {
-        this.updatePoll = timer(30000, 30000)
+        this.updatePoll = timer(this.updateEvery, this.updateEvery)
             .subscribe(
                 () => this.updateWeatherEvent.emit({index: this.index, zipcode: this.item.zipcode, countryCode: this.item.sys.country}));
     }

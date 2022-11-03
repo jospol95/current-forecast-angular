@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WeatherService} from '../services/weather.service';
-import {LocationService} from '../services/location.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {WeatherService} from '../../services/weather.service';
+import {LocationService} from '../../services/location.service';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {Weather} from '../state/weather';
-import {InitWeather, LoadWeather, RemoveWeatherCityForecast, UpdateWeather} from '../state/weather.actions';
+import {Weather} from '../../state/weather';
+import {InitWeather, LoadWeather, RemoveWeatherCityForecast, UpdateWeather} from '../../state/weather.actions';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -13,7 +13,8 @@ import {Observable} from 'rxjs';
     styleUrls: ['./current-conditions.component.css']
 })
 export class CurrentConditionsComponent implements OnInit, OnDestroy{
-
+    //Update weather tile in XXX miliseconds.
+    @Input() updateEvery: number;
     locationForecast$: Observable<Weather>;
 
     constructor(private weatherService: WeatherService,
@@ -29,7 +30,6 @@ export class CurrentConditionsComponent implements OnInit, OnDestroy{
     }
 
     initState(){
-        //TODO could be a resolver
         this.locationService.locationsV2.forEach((loc) => {
             const action = new InitWeather({zipcode: loc.zipcode, country: loc.country});
             this.store.dispatch(action);

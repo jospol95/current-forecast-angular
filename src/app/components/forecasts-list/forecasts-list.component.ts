@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {WeatherService} from '../services/weather.service';
+import {WeatherService} from '../../services/weather.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -17,7 +17,6 @@ export class ForecastsListComponent {
     route.params.subscribe(params => {
       this.zipcode = params['zipcode'];
       this.countryCode = params['countryCode'];
-      debugger;
       weatherService.getForecast(this.zipcode,this.countryCode)
         .subscribe(data => this.forecast = data);
     });
